@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Section</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+#commentsContainer {
+    margin-top: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Comment Section</h1>
+    <textarea id="commentInput" rows="4" cols="50" placeholder="Write a comment..."></textarea><br>
+    <button id="postComment">Post Comment</button>
+
+    <div id="commentsContainer">
+        <h2>Comments:</h2>
+        <ul id="commentsList"></ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const commentInput = document.getElementById('commentInput');
+    const postCommentButton = document.getElementById('postComment');
+    const commentsList = document.getElementById('commentsList');
+
+    // Load comments from local storage on page load
+    loadComments();
+
+    postCommentButton.addEventListener('click', () => {
+        const commentText = commentInput.value.trim();
+
+        if (commentText === '') {
+            alert('Please enter a comment.');
+            return;
+        }
+
+        // Save the comment to local storage
+        saveComment(commentText);
+        commentInput.value = ''; // Clear the input
+        loadComments(); // Refresh the comment list
+    });
+
+    function saveComment(comment) {
+        const comments = JSON.parse(localStorage.getItem('comments')) || [];
+        comments.push(comment);
+        localStorage.setItem('comments', JSON.stringify(comments));
+    }
+
+    function loadComments() {
+        const comments = JSON.parse(localStorage.getItem('comments')) || [];
+        commentsList.innerHTML = ''; // Clear the list
+
+        comments.forEach(comment => {
+            const li = document.createElement('li');
+            li.textContent = comment;
+            commentsList.appendChild(li);
+        });
+    }
+});
+
+    </script>
+</body>
+</html>
